@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Playfair Display', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --background: 210 20% 98%;
+  --foreground: 220 15% 15%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 220 15% 15%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 15% 15%;
+
+  --primary: 220 15% 15%;
+  --primary-foreground: 210 20% 98%;
+
+  --secondary: 210 20% 94%;
+  --secondary-foreground: 220 15% 15%;
+
+  --muted: 210 20% 94%;
+  --muted-foreground: 220 10% 45%;
+
+  --accent: 210 20% 94%;
+  --accent-foreground: 220 15% 15%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 220 10% 90%;
+  --input: 220 10% 90%;
+  --ring: 220 15% 15%;
+
+  --radius: 0.75rem;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased font-sans selection:bg-foreground/10;
+  }
+}
+
+/* Custom Utilities */
+.reveal-word {
+  @apply transition-all duration-300 cursor-default select-none decoration-dotted underline decoration-muted-foreground/50 underline-offset-4;
+}
+
+.reveal-word-hidden {
+  @apply text-transparent bg-clip-text decoration-dotted decoration-muted-foreground/50;
+  /* Add a subtle blur to make it look even more obscured if needed, but text-transparent is usually enough */
+}
+
+.reveal-word-visible {
+  @apply text-foreground decoration-transparent;
+}

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Smart Assessment</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  padding: 40px;
+}
+
+.container {
+  max-width: 700px;
+  background: white;
+  padding: 30px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+#question {
+  font-size: 18px;
+  margin-bottom: 20px;
+  user-select: none;
+}
+
+.word {
+  color: transparent;
+  border-bottom: 1px dotted #aaa;
+  padding: 2px 4px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.word.active {
+  color: black;
+}
+
+textarea {
+  width: 100%;
+  height: 120px;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 18px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Assessment Question</h2>
+
+  <div id="question">
+    <span class="word">What</span>
+    <span class="word">is</span>
+    <span class="word">the</span>
+    <span class="word">time</span>
+    <span class="word">complexity</span>
+    <span class="word">of</span>
+    <span class="word">binary</span>
+    <span class="word">search</span>
+    <span class="word">algorithm?</span>
+  </div>
+
+  <textarea id="answer" placeholder="Type your answer here..."></textarea>
+
+  <button onclick="submitForm()">Submit</button>
+
+  <pre id="result" class="hidden"></pre>
+</div>
+
+<script>
+/* ===== Tracking ===== */
+let mouseMoves = 0;
+let hoverCount = 0;
+let startTime = performance.now();
+let revealIndex = 0;
+
+document.addEventListener("mousemove", () => {
+  mouseMoves++;
+});
+
+document.addEventListener("paste", e => {
+  e.preventDefault();
+  alert("Paste disabled.");
+});
+
+/* ===== Progressive Reveal ===== */
+const words = document.querySelectorAll(".word");
+
+words.forEach((word, index) => {
+  word.addEventListener("mouseenter", () => {
+    if (index === revealIndex) {
+      word.classList.add("active");
+      revealIndex++;
+      hoverCount++;
+    }
+  });
+});
+
+/* ===== Submission ===== */
+function submitForm() {
+  const answer = document.getElementById("answer").value.trim();
+  const timeSpent = Math.round((performance.now() - startTime) / 1000);
+
+  let riskScore = 0;
+
+  if (mouseMoves < 100) riskScore += 0.4;
+  if (hoverCount < words.length) riskScore += 0.3;
+  if (answer.length > 150 && timeSpent < 30) riskScore += 0.4;
+
+  const submission = {
+    answer: answer,
+    timeSpentSeconds: timeSpent,
+    mouseMoves: mouseMoves,
+    hoverCount: hoverCount,
+    riskScore: Math.min(riskScore, 1.0)
+  };
+
+  document.getElementById("result").classList.remove("hidden");
+  document.getElementById("result").textContent =
+    "SUBMISSION DATA (for review):\n\n" +
+    JSON.stringify(submission, null, 2);
+}
+</script>
+
+</body>
+</html>
